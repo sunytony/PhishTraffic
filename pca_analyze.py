@@ -10,6 +10,7 @@ def remove_outliers_by_class(df, label_col):
     classes = df[label_col].unique()
     for cls in classes:
         class_df = df[df[label_col] == cls]
+        
         Q1 = class_df.quantile(0.25)
         Q3 = class_df.quantile(0.75)
         IQR = Q3 - Q1
@@ -17,7 +18,7 @@ def remove_outliers_by_class(df, label_col):
         df_no_outliers = pd.concat([df_no_outliers, class_no_outliers])
     return df_no_outliers
 
-label_mapping = {'Benign': 0, 'Phish': 1}
+label_mapping = {'Benign': '0', 'Phish': '1'}
 label_mapping_rev = {0: 'Benign', 1: 'Phish'}
 
 # Load your dataset
@@ -30,17 +31,17 @@ num_columns = df.shape[1] - 1  # 마지막 열은 레이블
 columns = [f'col_{i}' for i in range(num_columns)] + ['Label']
 df.columns = columns
 
-df['Label'] = df['Label'].map(label_mapping)
+# df['Label'] = df['Label'].map(label_mapping_rev)
 
 # Separate features and target variable
 # Replace 'target_column' with the name of your target variable column
 # X = pd.concat([df.iloc[:, 36:54], df.iloc[:, 90:108], df.iloc[:, -1]], axis=1)  
-X = pd.concat([df.iloc[:, 18:36], df.iloc[:, 72:90], df.iloc[:, -1]], axis=1)
-X = remove_outliers_by_class(X, 'Label')
+X = pd.concat([df.iloc[:, 0:18], df.iloc[:, 54:72], df.iloc[:, -1]], axis=1)
+# X = pd.concat([df.iloc[:, 90:108], df.iloc[:, -1]], axis=1)
+# X = remove_outliers_by_class(X, 'Label')
 X['Label'] = X['Label'].map(label_mapping_rev)
 y = X.pop('Label')
 X = X.dropna(axis=1)
-print(X)
 
 # Standardize the features
 scaler = StandardScaler()

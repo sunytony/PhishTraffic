@@ -22,25 +22,26 @@ columns.append('Label')
 df.columns = columns
 
 # Initialize PyCaret setup
-exp_clf = setup(data=df, target=None, verbose=False)
+exp_clf = setup(data=df, target=None, train_size=0.8)
 
 # Compare models and select the best one
-best_model = compare_models()
-
+best_model = compare_models(sort='F1', fold=5, n_select=10)
+tuned_model = [tune_model(i, fold=5, optimize='F1', n_iter=100) for i in best_model]
 # Evaluate the best model
-evaluate_model(best_model)
+evaluate_model(tuned_model)
 
 # ROC Curve
-plot_model(best_model, plot='auc')
+# plot_model(best_model, plot='auc')
 
-# Precision-Recall Curve
-plot_model(best_model, plot='pr')
+# # Precision-Recall Curve
+# plot_model(best_model, plot='pr')
 
 # Feature Importance
-# plot_model(best_model, plot='feature')
+# plot_model(tuned_model, plot='feature')
+save_model(tuned_model, './model')
 
-# Learning Curve
-plot_model(best_model, plot='learning')
+# # Learning Curve
+# plot_model(best_model, plot='learning')
 
 # # Validation Curve
 # plot_model(best_model, plot='vc')

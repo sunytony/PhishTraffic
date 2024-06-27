@@ -4,6 +4,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.firefox import GeckoDriverManager
+from webdriver_manager.microsoft import EdgeChromiumDriverManager
 import queue
 import time
 import sys
@@ -12,7 +14,7 @@ from urllib import parse
 
 conf.use_pcap = True
 
-options = ChromeOptions()
+options = webdriver.EdgeOptions()
 options.add_argument('incognito')
 options.add_argument('--headless')
 options.add_argument('--no-sandbox')
@@ -20,7 +22,7 @@ options.add_experimental_option('prefs', {'safebrowsing.enabled':False})
 
 def process_domain(domain, result):
     time.sleep(1)
-    driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    driver = webdriver.Edge(EdgeChromiumDriverManager().install(), options=options)
     print("tests")
     response = 200	
     try:
@@ -32,7 +34,6 @@ def process_domain(domain, result):
         domain = domain.replace("http:", '')
         domain = domain.replace("/", '')
         domain = domain.replace("\n", '')
-        
         
     except:
         print("502 error")
@@ -55,7 +56,7 @@ def main():
 		thread.join()
 
 		if result.get() == 200:
-			file_name = "/home/seungmin/phish/traffic/chrome/%s.pcap"%(domain.replace("/",''))
+			file_name = "/home/seungmin/phish/traffic/edge/%s.pcap"%(domain.replace("/",''))
 			try:
 				wrpcap(str(file_name), pcap_file)
 			except:

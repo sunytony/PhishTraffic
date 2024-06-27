@@ -119,7 +119,7 @@ if __name__ == '__main__':
             
             data = feature_vector(time_arr) + feature_vector(down_time_arr) + feature_vector(up_time_arr)
             data += feature_vector(packet_length_arr) + feature_vector(down_packet_length_arr) + feature_vector(up_packet_length_arr)
-            data.append('1')
+            data.append('0')
             vec.append(data)
             
         except:
